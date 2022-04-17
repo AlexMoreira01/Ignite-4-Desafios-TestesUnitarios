@@ -2,6 +2,7 @@ import { AppError } from "../../../../shared/errors/AppError";
 import { InMemoryUsersRepository } from "../../../users/repositories/in-memory/InMemoryUsersRepository";
 import { CreateUserUseCase } from "../../../users/useCases/createUser/CreateUserUseCase";
 import { ICreateUserDTO } from "../../../users/useCases/createUser/ICreateUserDTO";
+import { Statement } from "../../entities/Statement";
 import { InMemoryStatementsRepository } from "../../repositories/in-memory/InMemoryStatementsRepository";
 import { GetBalanceUseCase } from "./GetBalanceUseCase";
 
@@ -21,11 +22,11 @@ describe("List a get balance", () => {
   })
 
   it("should be able to get user balance ",async () => {
-    const user: ICreateUserDTO = ({
-      name: "user name test",
-      email: "userEmail@test.com.br",
-      password: "12345"
-    })
+    const user: ICreateUserDTO = {
+      name: "UserAuthenticatePassword",
+      email: "userauthenticate@password.com.br",
+      password : "12345"
+    };
 
     const userCreated = await createUserUseCase.execute({
       name: user.name,
@@ -33,16 +34,18 @@ describe("List a get balance", () => {
       password: user.password
     })
 
-    const getBalance = await getBalanceUseCase.execute({user_id:userCreated.id as string})
+    const userBalance = await getBalanceUseCase.execute({user_id:userCreated.id as string})
 
-    expect(getBalance).toHaveProperty("statement");
-    expect(getBalance).toHaveProperty("balance");
-
-
+    expect(userBalance).toHaveProperty("statement")
+    expect(userBalance).toHaveProperty("balance")
   })
 
-  it("should not be able to authenticate with incorrect password", () => {
-
+  it("should not be able to authenticate for user non existant", async () => {
+    expect(async () =>{
+      const balance = await getBalanceUseCase.execute({
+        user_id:"id9534is0invalid"
+      })
+    }).rejects.toBeInstanceOf(AppError)
 
   })
 

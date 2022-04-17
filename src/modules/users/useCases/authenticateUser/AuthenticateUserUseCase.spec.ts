@@ -11,29 +11,33 @@ let createUserUseCase: CreateUserUseCase
 describe("Authencticate User", () => {
   beforeEach(() => {
     usersRepositoryInMemory = new InMemoryUsersRepository();
-    authenticateUserUseCase = new AuthenticateUserUseCase(usersRepositoryInMemory);
     createUserUseCase = new CreateUserUseCase(usersRepositoryInMemory);
+    authenticateUserUseCase = new AuthenticateUserUseCase(usersRepositoryInMemory);
   })
 
-  // it("should be able to authenticate an user", async () => {
-  //   const user: ICreateUserDTO = {
-  //     name: "User Authenticate",
-  //     email: "userauthenticate@test.com.br",
-  //     password : "test12345"
-  //   };
+  it("should be able to authenticate an user", async () => {
+    const user: ICreateUserDTO = {
+      name: "User Authenticate",
+      email: "userauthenticate@test.com.br",
+      password : "test12345"
+    };
 
-  //   await createUserUseCase.execute(user);
+    await createUserUseCase.execute({
+      name: user.name,
+      email: user.email,
+      password: user.password
+    });
 
-  //   const result = await authenticateUserUseCase.execute({
-  //     email: user.email,
-  //     password: user.password,
-  //   });
+    const Authentication = await authenticateUserUseCase.execute({
+      email: user.email,
+      password: user.password,
+    });
 
-  //   // console.log(result)
+    console.log(Authentication)
 
-  //   expect(result).toHaveProperty("token");
+    expect(Authentication).toHaveProperty("token");
 
-  // });
+  });
 
   it("should not be able to authenticate with incorrect password", () => {
     expect(async () => {

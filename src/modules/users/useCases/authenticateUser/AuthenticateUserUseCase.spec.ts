@@ -8,7 +8,7 @@ let authenticateUserUseCase: AuthenticateUserUseCase
 let usersRepositoryInMemory: InMemoryUsersRepository
 let createUserUseCase: CreateUserUseCase
 
-describe("Authencticate User", () => {
+describe("Authenticate User", () => {
   beforeEach(() => {
     usersRepositoryInMemory = new InMemoryUsersRepository();
     createUserUseCase = new CreateUserUseCase(usersRepositoryInMemory);

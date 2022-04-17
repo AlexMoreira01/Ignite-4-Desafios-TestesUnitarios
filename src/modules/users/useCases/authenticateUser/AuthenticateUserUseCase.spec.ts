@@ -1,3 +1,4 @@
+import auth from "../../../../config/auth";
 import { AppError } from "../../../../shared/errors/AppError";
 import { InMemoryUsersRepository } from "../../repositories/in-memory/InMemoryUsersRepository";
 import { CreateUserUseCase } from "../createUser/CreateUserUseCase";
@@ -28,12 +29,12 @@ describe("Authenticate User", () => {
       password: user.password
     });
 
+    auth.jwt.secret = user.password;
+
     const Authentication = await authenticateUserUseCase.execute({
       email: user.email,
       password: user.password,
     });
-
-    console.log(Authentication)
 
     expect(Authentication).toHaveProperty("token");
 
